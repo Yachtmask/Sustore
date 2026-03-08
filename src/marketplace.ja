@@ -1,0 +1,135 @@
+// marketplace.js — sustore marketplace logic
+// Handles product listings, purchases, and AI-powered discovery
+
+const { uploadProduct, listProducts, getDownloadUrl } = require(”./storage”);
+
+// In-memory product store (replace with a real DB in production)
+const products = [
+{
+id: “1”,
+name: “GPT Prompt Pack — Productivity Suite”,
+description: “100+ battle-tested prompts for developers and founders”,
+category: “prompts”,
+price: 4.99,
+creator: “shelbyserves”,
+storageKey: “products/prompt-pack-v1.zip”,
+downloads: 142,
+rating: 4.8,
+},
+{
+id: “2”,
+name: “AI Image Dataset — Storefronts”,
+description: “10,000 labeled storefront images for computer vision training”,
+category: “datasets”,
+price: 29.99,
+creator: “shelbyserves”,
+storageKey: “products/storefront-dataset.zip”,
+downloads: 38,
+rating: 4.6,
+},
+{
+id: “3”,
+name: “Lightweight Sentiment Analysis Model”,
+description: “Fine-tuned BERT model for product review sentiment (ONNX format)”,
+category: “models”,
+price: 19.99,
+creator: “shelbyserves”,
+storageKey: “products/sentiment-model.onnx”,
+downloads: 77,
+rating: 4.9,
+},
+];
+
+/**
+
+- Get all product listings
+  */
+  function getAllProducts(category = null) {
+  if (category) {
+  return products.filter((p) => p.category === category);
+  }
+  return products;
+  }
+
+/**
+
+- Get a single product by ID
+  */
+  function getProduct(id) {
+  return products.find((p) => p.id === id) || null;
+  }
+
+/**
+
+- AI-powered product search (basic keyword matching — will integrate Shelby MCP)
+- TODO: Replace with Shelby Skills / MCP agent for semantic search
+  */
+  function searchProducts(query) {
+  const q = query.toLowerCase();
+  return products.filter(
+  (p) =>
+  p.name.toLowerCase().includes(q) ||
+  p.description.toLowerCase().includes(q) ||
+  p.category.toLowerCase().includes(q)
+  );
+  }
+
+/**
+
+- List a new product on the marketplace
+- Uploads file to Shelby storage, then adds to listings
+  */
+  async function listNewProduct(fileBuffer, fileName, productData) {
+  const uploaded = await uploadProduct(fileBuffer, fileName, {
+  creator: productData.creator,
+  category: productData.category,
+  price: productData.price,
+  });
+
+const newProduct = {
+id: String(products.length + 1),
+…productData,
+storageKey: uploaded.key,
+storageUrl: uploaded.url,
+verificationHash: uploaded.etag, // Shelby cryptographic proof
+listedAt: uploaded.uploadedAt,
+downloads: 0,
+rating: null,
+};
+
+products.push(newProduct);
+return newProduct;
+}
+
+/**
+
+- Purchase a product — returns a time-limited signed download URL
+- TODO: Add Aptos on-chain receipt generation here
+  */
+  async function purchaseProduct(productId, buyerAddress) {
+  const product = getProduct(productId);
+  if (!product) throw new Error(“Product not found”);
+
+const downloadUrl = await getDownloadUrl(product.storageKey, 3600);
+
+// Increment download counter
+product.downloads += 1;
+
+return {
+productId,
+productName: product.name,
+buyer: buyerAddress,
+downloadUrl,
+expiresIn: “1 hour”,
+purchasedAt: new Date().toISOString(),
+// receipt: await generateAptosReceipt(productId, buyerAddress), // Coming soon
+};
+}
+
+module.exports = {
+getAllProducts,
+getProduct,
+searchProducts,
+listNewProduct,
+purchaseProduct,
+};
