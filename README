@@ -1,0 +1,102 @@
+# 🛍️ sustore
+
+> **AI-Powered Digital Product Marketplace built on Shelby’s verifiable object storage**
+
+sustore is a decentralized marketplace where creators can upload, sell, and distribute digital products — AI models, datasets, prompt packs, and media files — stored and served on [Shelby](https://developers.shelby.xyz), the world’s first verifiable global object storage for AI workloads.
+
+-----
+
+## 🚀 What sustore Does
+
+- 🧠 **AI-powered discovery** — Smart recommendations using Shelby Skills & MCP agent tooling
+- 🗄️ **Decentralized storage** — All files stored on Shelby’s S3-compatible hot storage (70% cheaper than AWS)
+- 🔐 **Verifiable ownership** — Every purchase generates a cryptographic receipt anchored on Aptos
+- 🖼️ **GenAI previews** — Product previews generated and distributed via Shelby Media Kit
+- ⚡ **Global delivery** — Single global namespace, low-latency access from anywhere
+
+-----
+
+## 🏗️ Built With
+
+- [Shelby Storage](https://developers.shelby.xyz) — S3-compatible verifiable object storage
+- [Shelby MCP Server](https://developers.shelby.xyz) — AI agent tooling for smart product discovery
+- [Shelby Media Kit](https://developers.shelby.xyz) — GenAI content distribution
+- HTML / CSS / JavaScript — Frontend
+- Node.js — Backend API
+
+-----
+
+## 📦 Project Structure
+
+```
+sustore/
+├── src/
+│   ├── app.js          # Main application logic
+│   ├── storage.js      # Shelby storage integration
+│   └── marketplace.js  # Marketplace logic (listings, purchases)
+├── public/
+│   └── index.html      # Landing page
+├── README.md
+└── package.json
+```
+
+-----
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- Node.js v18+
+- A [Shelby](https://developers.shelby.xyz) developer account
+- GitHub account
+
+### Installation
+
+```bash
+git clone https://github.com/YOUR_USERNAME/sustore.git
+cd sustore
+npm install
+```
+
+### Configuration
+
+Create a `.env` file:
+
+```env
+SHELBY_API_KEY=your_shelby_api_key
+SHELBY_BUCKET=sustore-products
+PORT=3000
+```
+
+### Run Locally
+
+```bash
+npm start
+```
+
+Open your browser at `http://localhost:3000`
+
+-----
+
+## 🔮 Roadmap
+
+- [x] Landing page & UI
+- [x] Shelby storage integration layer
+- [ ] Creator upload dashboard
+- [ ] AI-powered product search (Shelby MCP)
+- [ ] Verifiable purchase receipts (Aptos)
+- [ ] Shelby Media Kit for GenAI previews
+- [ ] Mobile-responsive marketplace
+
+-----
+
+## 👤 Author
+
+**@shelbyserves** on X / Twitter  
+**@sujalle1** on Telegram
+
+-----
+
+## 📄 License
+
+MIT License — feel free to fork and build on top of sustore.
